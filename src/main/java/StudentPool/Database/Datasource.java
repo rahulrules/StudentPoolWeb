@@ -7,7 +7,7 @@ public class Datasource {
     //making Datasource class a singleton class- Eager Initialization
     private static final Datasource datasource = new Datasource();
 
-    //private constructor - so no dafualt no arg constructor is not applicable
+    //private constructor - so no default no arg constructor is not applicable
     private Datasource(){
 
     }
@@ -21,10 +21,7 @@ public class Datasource {
     private static final String CONNECTION="jdbc:postgresql://localhost/"+
             DB_NAME+"?user=postgres&password=Luhar123";
 
-    private static final String USER_TAB ="users";
-    private static final String USER_ID="id";
-    private static final String USER_USER_ID="user_id";
-    private static final String USER_USER_PAS="user_password";
+
 
     private static final String SP_TAB="studentprofiles";
     private static final String SP_ID="id";
@@ -35,20 +32,9 @@ public class Datasource {
     private static final String SP_ADMIT="admityear";
     private static final String SP_RESIDE= "residentcity";
 
-    private static final String R_TAB="rides";
-    private static final String R_ID="id";
-    private static final String R_USERID="user_id";
-    private static final String R_DATE="ride_date";
-    private static final String R_TIME="ride_time";
-    private static final String R_START="start_from";
-    private static final String R_END="end_to";
-    private static final String R_SLOTS="slots_offered";
-    private static final String R_INST="instructions";
 
 
 
-    private static final String USER_INS= "INSERT INTO "+
-            USER_TAB+"("+USER_USER_ID+","+USER_USER_PAS+") VALUES(?,?)";
 
     private static final String SP_INS= "INSERT INTO "+
             SP_TAB+"("+SP_ID+","+SP_USERID+","+SP_FIRSTNAME+") VALUES(?,?,?)";// start from here for OCT 22.
@@ -62,8 +48,6 @@ public class Datasource {
     private boolean open(){
         try{
             conn = DriverManager.getConnection(CONNECTION);
-//            insertuser=conn.prepareStatement(USER_INS);
-
             return true;
         }
         catch (SQLException e){
@@ -73,14 +57,12 @@ public class Datasource {
     }
 
     public Connection getConn(){
-
             return this.conn;
     }
 
     public void close(){
 
         try{
-
             if(conn!=null){
                 conn.close();
             }

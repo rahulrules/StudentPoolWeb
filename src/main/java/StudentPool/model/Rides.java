@@ -1,7 +1,10 @@
 package StudentPool.model;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Rides {
@@ -11,8 +14,30 @@ public class Rides {
     private Time ride_time;
     private String start_from=null;
     private String end_to;
-    private Integer slots_offered=null;
+    private Integer slots_offered=1;
     private String instructions=null;
+    private List<Link> links=new ArrayList<>();
+
+    public Rides() {
+    }
+
+    public Rides(String user_id, Date ride_date, Time ride_time, String start_from,String end_to) {
+        this.user_id = user_id;
+        this.ride_date = ride_date;
+        this.ride_time = ride_time;
+        this.start_from=start_from;
+        this.end_to = end_to;
+    }
+
+    public Rides(String user_id, Date ride_date, Time ride_time, String start_from, String end_to, Integer slots_offered, String instructions) {
+        this.user_id = user_id;
+        this.ride_date = ride_date;
+        this.ride_time = ride_time;
+        this.start_from = start_from;
+        this.end_to = end_to;
+        this.slots_offered = slots_offered;
+        this.instructions = instructions;
+    }
 
     public Integer getId() {
         return id;
@@ -76,5 +101,18 @@ public class Rides {
 
     public void setInstructions(String instructions) {
         this.instructions = instructions;
+    }
+
+    public List<Link> getLinks() {
+        return links;
+    }
+
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
+
+    public void addlink(String link,String rel){//Method is duplicated; to simplify code I believe its best to have here
+        Link templink= new Link(link,rel);
+        links.add(templink);
     }
 }
