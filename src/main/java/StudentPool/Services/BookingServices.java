@@ -2,14 +2,14 @@ package StudentPool.Services;
 
 import StudentPool.Database.Datasource;
 import StudentPool.model.Bookings;
-import com.sun.tools.xjc.generator.bean.ImplStructureStrategy;
 
-import javax.sound.midi.Soundbank;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BookingServices {
+
     public static void main(String[] args) {
 //        System.out.println(BOOK_INSERT);
         Bookings newbooking= new Bookings("RXJ08740@ucmo.edu",
@@ -34,9 +34,15 @@ public class BookingServices {
     private static final String BOOK_DELID= "DELETE"+" FROM "+BOOK_TAB+
             " WHERE "+ BOOK_ID+"=?";
 
+    private static final String BOOK_UPDATE="UPDATE "+BOOK_TAB+
+            " SET "+BOOK_SLOTS+"=?"+","+BOOK_INST+"=?"+","+BOOK_DATE+"=?"+" WHERE "+BOOK_ID+"=?";
+    private static final String BOOK_GETID= "SELECT * FROM "+BOOK_TAB+" WHERE "+BOOK_ID+"=?";
+
     private PreparedStatement ridebookings;
     private PreparedStatement insertbook;
     private PreparedStatement delbookbyID;
+    private PreparedStatement updatebookbyID;
+    private PreparedStatement getbookbyID;
 
 
     private boolean open(){
@@ -45,7 +51,8 @@ public class BookingServices {
             ridebookings= Datasource.getInstance().getConn().prepareStatement(BOOK_VIEWBYRIDEID);
             insertbook= Datasource.getInstance().getConn().prepareStatement(BOOK_INSERT,Statement.RETURN_GENERATED_KEYS);
             delbookbyID= Datasource.getInstance().getConn().prepareStatement(BOOK_DELID);
-
+            updatebookbyID= Datasource.getInstance().getConn().prepareStatement(BOOK_UPDATE);
+            getbookbyID= Datasource.getInstance().getConn().prepareStatement(BOOK_GETID);
             return true;
 
         } catch (SQLException e){
@@ -64,6 +71,12 @@ public class BookingServices {
             }
             if(delbookbyID!=null){
                 delbookbyID.close();
+            }
+            if(updatebookbyID!=null){
+                updatebookbyID.close();
+            }
+            if(getbookbyID!=null){
+                getbookbyID.close();
             }
         }catch (SQLException e){
             System.out.println("Error Closing Prepared Statements for Bookings: "+e.getMessage());
@@ -162,6 +175,49 @@ public class BookingServices {
         finally {
             this.close();
         }
+    }
+
+    public Integer updateBookingbyID(Bookings modifybook,String id){
+        this.open();
+        try {
+            updatebookbyID.setInt(1,modifybook.getSlots_booked());
+            updatebookbyID.setString(2,modifybook.getInstructions());
+            updatebookbyID.setTimestamp(3, Timestamp.valueOf(modifybook.getBooking_date()));
+            updatebookbyID.setInt(4,Integer.valueOf(id));
+            int affectedrows= updatebookbyID.executeUpdate();
+            if(affectedrows!=1){
+                System.out.println("Affectedrows Error Updating into Booking table");
+                return -1;
+            }
+        }catch (SQLException e){
+            System.out.println("Error Updating In to Bookings Table: "+e.getMessage());
+            return -1;
+        }
+        finally {
+            this.close();
+        }
+        return 1;
+    }
+
+    public Bookings getBookingbyID(Integer bookingid){
+       Bookings result= new Bookings();
+        this.open();
+
+        try{
+            getbookbyID.setInt(1,bookingid);
+            ResultSet rs= getbookbyID.executeQuery();
+
+            while (rs.next()){
+                result=ExtractBookingRS(rs);
+            }
+        }
+        catch (SQLException e){
+            System.out.println("Error Querying Booking ID: "+bookingid+"-:"+e.getMessage());
+        }
+        finally {
+            this.close();
+        }
+        return result;
     }
 
 }

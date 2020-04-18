@@ -37,7 +37,7 @@ public class Datasource {
 
 
     private static final String SP_INS= "INSERT INTO "+
-            SP_TAB+"("+SP_ID+","+SP_USERID+","+SP_FIRSTNAME+") VALUES(?,?,?)";// start from here for OCT 22.
+            SP_TAB+"("+SP_ID+","+SP_USERID+","+SP_FIRSTNAME+") VALUES(?,?,?)";
 
 
 
@@ -51,7 +51,7 @@ public class Datasource {
             return true;
         }
         catch (SQLException e){
-            System.out.println("Can't Connect to database: "+e.getMessage());
+            System.out.println("Can't Connect to Datasoruce database: "+e.getMessage());
             return false;
         }
     }

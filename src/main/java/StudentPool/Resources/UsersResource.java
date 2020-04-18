@@ -25,8 +25,8 @@ public class UsersResource {
 
     @GET
    @Path("/{id}")
-   public Users getUser(@PathParam("id") Integer id, @Context UriInfo uriInfo){
-        Users fetcheduser= newuserservice.getUserFromID(id);
+   public Users getUser(@PathParam("id") String id, @Context UriInfo uriInfo){
+        Users fetcheduser= newuserservice.getUserFromID(Integer.valueOf(id));
         fetcheduser.addlink(getURIforSelf(uriInfo,fetcheduser),"self");
         fetcheduser.addlink(RidesOfferedResource.getURIForAllRO(uriInfo),"Rides Offered");
         return fetcheduser;
@@ -49,15 +49,17 @@ public class UsersResource {
 
     }
 
-    @GET
+    @POST
     @Path("/login")
     public Users loginaccount(Users newuser,@Context UriInfo uriInfo){
         Integer id=newuserservice.IsResgisteredUser(newuser);
         if(id>0){
-           return getUser(id,uriInfo);//change th log in links method
+
+           return getUser(String.valueOf(id),uriInfo);//change the login links method
         }
         return null;
     }
+
 
 
 
@@ -70,11 +72,6 @@ public class UsersResource {
         return uri;
     }
 
-//    private String getURIforRidesOffered(UriInfo uriInfo){//shoud I pass the object or just its id
-//        String uri=uriInfo.getBaseUriBuilder()
-//                .path(RidesOfferedResource.class)
-//                .build()
-//                .toString();
-//        return uri;
-//    }
+
+
 }

@@ -5,8 +5,12 @@ import StudentPool.Services.UsersServices;
 import StudentPool.model.Users;
 import org.glassfish.jersey.internal.util.Base64;
 
+import javax.annotation.Priority;
+
+import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
@@ -17,30 +21,36 @@ import java.util.StringTokenizer;
 
 
 @Provider
+@PreMatching
+@Priority(Priorities.AUTHENTICATION)
 public class UserAuthenticationFilter implements ContainerRequestFilter {
+
     private static final String AUTHORIZATION="Authorization";
     private static final String BASICAUTH_PREFIX="Basic ";//basic word with a space
 //    private static final String[] secureresouces={"rides_offered","bookings"};
 //    private static final List<String > secureresourcellist=new ArrayList<>(Arrays.asList(secureresouces));
-    private static final  String BOOKING="rides_offered";
-
+    private static final  String BOOKING="bookings";
+    private static final ArrayList<String> methodarraylist= new ArrayList<>(Arrays.asList("POST","DELETE","PUT"));
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         if(requestContext.getUriInfo().getPath().contains(BOOKING)){
-            List<String> authtokenlist=requestContext.getHeaders().get(AUTHORIZATION);
+//            if(methodarraylist.contains(requestContext.getMethod())) {
 
-            if(extractUsername(authtokenlist)!=null){
-                return;
-            }
-            Response unauthorizedstatus= Response
-                    .status(Response.Status.UNAUTHORIZED)
-                    .entity("User cannot access the resource")
-                    .build();
+                List<String> authtokenlist = requestContext.getHeaders().get(AUTHORIZATION);
 
-            requestContext.abortWith(unauthorizedstatus);
+                if (extractUsername(authtokenlist) != null) {
+                    return;
+                }
+                Response unauthorizedstatus = Response
+                        .status(Response.Status.UNAUTHORIZED)
+                        .entity("User cannot access the resource")
+                        .build();
+
+                requestContext.abortWith(unauthorizedstatus);
         }
-    }
+            }
+//    }
 
     public String extractUsername(List<String> authtokenlist){
 
@@ -56,7 +66,7 @@ public class UserAuthenticationFilter implements ContainerRequestFilter {
 
             if(new UsersServices().IsResgisteredUser(authuser)>0){
 
-                return authuser.getUser_password();
+                return authuser.getUser_id();
             }
         }
         return null;

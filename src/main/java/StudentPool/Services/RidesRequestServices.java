@@ -3,50 +3,66 @@ package StudentPool.Services;
 import StudentPool.Database.Datasource;
 import StudentPool.model.Rides;
 
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RidesOfferedServices {
+public class RidesRequestServices {
 
     public static void main(String[] args) {
 
-        RidesOfferedServices newservice= new RidesOfferedServices();
-//        System.out.println(newservice.RidesToCity("NewYork").size());
-//        Rides newride= new Rides("RXJ123@ucmo.edu","2019-05-20","18:00:00","Warrensburg","Sanjose");
-//        System.out.println(newservice.InsertIntoRO(newride));
-//        System.out.println(newservice.getRideFromId(5).getEnd_to());
-//        System.out.println(newservice.deleteRidebyID(201));
+
+
+        String[] emailids= {"RXJ08740@ucmo.edu","SXP28730@ucmo.edu","SXT04990@ucmo.edu","RXJ0007@ucmo.edu","rahul123@ucmo.edu"};
+        String[] datestring={"2020-01-5","2020-01-15","2020-02-25","2020-02-04"};
+        String[] timestring={"10:00:00","14:00:00","16:00:00"};
+        String[] tocity={"San Jose","San Francisco","San Diego ","Santa Clara","San Marcos","Santa Monica","Santa Barbara"};
+        String[] startcity={"Warrensburg","Lees summit","KansasCity","Overland Park"};
+        Integer[] slots={2,3,4};
+        String[] instruction={"paid ride", "tour of USA","Only friendly rides"};
+
+        RidesRequestServices newservice= new RidesRequestServices();
+        for(int i=0;i<200;i++){
+            Rides newofferide= new Rides(emailids[(int)(Math.random()*emailids.length)],
+                   (datestring[(int)(Math.random()*datestring.length)]),
+                   (timestring[(int)(Math.random()*timestring.length)]),
+                    startcity[(int)(Math.random()*startcity.length)],
+                    tocity[(int)(Math.random()*tocity.length)],
+                    slots[(int)(Math.random()*slots.length)],
+                    instruction[(int)(Math.random()*instruction.length)]);
+
+            newservice.InsertIntoRR(newofferide);
+
+        }
 
     }
 
-    private static final String RO_OFFERTAB="rides_offered";
-    private static final String RO_ID ="id";
-    private static final String RO_USERID="user_id";
-    private static final String RO_DATE="ride_date";
-    private static final String RO_TIME="ride_time";
-    private static final String RO_START="start_from";
-    private static final String RO_END="end_to";
-    private static final String RO_SLOTS="slots_offered";
-    private static final String RO_INST="instructions";
+    private static final String RR_OFFERTAB="rides_requested";
+    private static final String RR_ID ="id";
+    private static final String RR_USERID="user_id";
+    private static final String RR_DATE="ride_date";
+    private static final String RR_TIME="ride_time";
+    private static final String RR_START="start_from";
+    private static final String RR_END="end_to";
+    private static final String RR_SLOTS="slots_offered";
+    private static final String RR_INST="instructions";
 
-    private static final String RO_VIEWALL= "SELECT *"+" FROM "+RO_OFFERTAB;
-    private static final String RO_INSERT= "INSERT INTO "+RO_OFFERTAB+
-            "("+RO_USERID+","+RO_DATE+","+RO_TIME+","+RO_START+","+RO_END+","+RO_SLOTS+","+RO_INST+") VALUES(?,?,?,?,?,?,?)";
-    private static final String RO_TOCITY= "SELECT *"+" FROM "+RO_OFFERTAB+
-            " WHERE "+RO_END+"=?"+ " ORDER BY "+RO_DATE+","+RO_TIME;
-    private static final String RO_FROMID= "SELECT *"+" FROM "+RO_OFFERTAB+
-            " WHERE "+ RO_ID +"=?";
-    private static final String RO_DELID= "DELETE"+" FROM "+RO_OFFERTAB+
-            " WHERE "+ RO_ID +"=?";
-    private static final String RO_UPDATE="UPDATE "+RO_OFFERTAB+
-            " SET "+RO_USERID+"=?"+","+RO_DATE+"=?"+","+
-            RO_TIME+"=?"+","+RO_START+"=?"+","+
-            RO_END+"=?"+","+RO_SLOTS+"=?"+","+RO_INST+"=?"+ " WHERE "+RO_ID+"=?";
+    private static final String RR_VIEWALL= "SELECT *"+" FROM "+RR_OFFERTAB;
+    private static final String RR_INSERT= "INSERT INTO "+RR_OFFERTAB+
+            "("+RR_USERID+","+RR_DATE+","+RR_TIME+","+RR_START+","+RR_END+","+RR_SLOTS+","+RR_INST+") VALUES(?,?,?,?,?,?,?)";
+    private static final String RR_TOCITY= "SELECT *"+" FROM "+RR_OFFERTAB+
+            " WHERE "+RR_END+"=?"+ " ORDER BY "+RR_DATE+","+RR_TIME;
+    private static final String RR_FROMID= "SELECT *"+" FROM "+RR_OFFERTAB+
+            " WHERE "+ RR_ID +"=?";
+    private static final String RR_DELID= "DELETE"+" FROM "+RR_OFFERTAB+
+            " WHERE "+ RR_ID +"=?";
+    private static final String RR_UPDATE="UPDATE "+RR_OFFERTAB+
+            " SET "+RR_USERID+"=?"+","+RR_DATE+"=?"+","+
+            RR_TIME+"=?"+","+RR_START+"=?"+","+
+            RR_END+"=?"+","+RR_SLOTS+"=?"+","+RR_INST+"=?"+ " WHERE "+RR_ID+"=?";
 
-    private PreparedStatement viewofferedrides;
-    private PreparedStatement insertrideoffer;
+    private PreparedStatement viewrequestrides;
+    private PreparedStatement insertriderequest;
     private PreparedStatement queryridetocity;
     private PreparedStatement queryridebyID;
     private PreparedStatement deleteridebyID;
@@ -54,14 +70,15 @@ public class RidesOfferedServices {
 
 
     private boolean open(){
+        
         try{
             //All sql query prepared statements for the user table
-            viewofferedrides= Datasource.getInstance().getConn().prepareStatement(RO_VIEWALL);
-            insertrideoffer= Datasource.getInstance().getConn().prepareStatement(RO_INSERT,Statement.RETURN_GENERATED_KEYS);
-            queryridetocity= Datasource.getInstance().getConn().prepareStatement(RO_TOCITY);
-            queryridebyID= Datasource.getInstance().getConn().prepareStatement(RO_FROMID);
-            deleteridebyID= Datasource.getInstance().getConn().prepareStatement(RO_DELID);
-            updateridebyID= Datasource.getInstance().getConn().prepareStatement(RO_UPDATE);
+            viewrequestrides = Datasource.getInstance().getConn().prepareStatement(RR_VIEWALL);
+            insertriderequest= Datasource.getInstance().getConn().prepareStatement(RR_INSERT, Statement.RETURN_GENERATED_KEYS);
+            queryridetocity= Datasource.getInstance().getConn().prepareStatement(RR_TOCITY);
+            queryridebyID= Datasource.getInstance().getConn().prepareStatement(RR_FROMID);
+            deleteridebyID= Datasource.getInstance().getConn().prepareStatement(RR_DELID);
+            updateridebyID= Datasource.getInstance().getConn().prepareStatement(RR_UPDATE);
             return true;
         }
         catch (SQLException e){
@@ -72,11 +89,11 @@ public class RidesOfferedServices {
 
     private void close(){
         try{
-            if(viewofferedrides!=null){
-                viewofferedrides.close();
+            if(viewrequestrides !=null){
+                viewrequestrides.close();
             }
-            if(insertrideoffer!=null){
-                insertrideoffer.close();
+            if(insertriderequest!=null){
+                insertriderequest.close();
             }
             if(queryridetocity!=null){
                 queryridetocity.close();
@@ -100,25 +117,26 @@ public class RidesOfferedServices {
 
     }
 
-    public Integer InsertIntoRO(Rides rideoffer){
+    public Integer InsertIntoRR(Rides riderequest){
         this.open();
         Integer createdid=0;
+
         try{
-            insertrideoffer.setString(1,rideoffer.getUser_id().toLowerCase());
-            insertrideoffer.setDate(2,Date.valueOf(rideoffer.getRide_date()));
-            insertrideoffer.setTime(3,Time.valueOf(rideoffer.getRide_time()));
-            insertrideoffer.setString(4,rideoffer.getStart_from());
-            insertrideoffer.setString(5,rideoffer.getEnd_to());
-            insertrideoffer.setInt(6,rideoffer.getSlots_offered());
-            insertrideoffer.setString(7,rideoffer.getInstructions());
-            int affectedrows= insertrideoffer.executeUpdate();
+            insertriderequest.setString(1,riderequest.getUser_id().toLowerCase());
+            insertriderequest.setDate(2, Date.valueOf(riderequest.getRide_date()));
+            insertriderequest.setTime(3, Time.valueOf(riderequest.getRide_time()));
+            insertriderequest.setString(4,riderequest.getStart_from());
+            insertriderequest.setString(5,riderequest.getEnd_to());
+            insertriderequest.setInt(6,riderequest.getSlots_offered());
+            insertriderequest.setString(7,riderequest.getInstructions());
+            int affectedrows= insertriderequest.executeUpdate();
 
 
             if(affectedrows!=1){
-                System.out.println("Affectedrows Error Inserting into rides_offered table");
+                System.out.println("Affectedrows Error Inserting into rides_requested table");
                 return -1;
             }
-            ResultSet rs= insertrideoffer.getGeneratedKeys();
+            ResultSet rs= insertriderequest.getGeneratedKeys();
             while (rs.next()){
                 createdid=rs.getInt(1);
             }
@@ -154,17 +172,17 @@ public class RidesOfferedServices {
         return tempride;
     }
 
-    public List<Rides> getAllOfferedRides(){
+    public List<Rides> getAllRequestedRides(){
         List<Rides> result = new ArrayList<>();
         this.open();
         try{
-            ResultSet resultSet =viewofferedrides.executeQuery();
+            ResultSet resultSet = viewrequestrides.executeQuery();
             while(resultSet.next()){
                 result.add(ExtractFromResultSet(resultSet));
             }
             return result;
         }catch (SQLException e){
-            System.out.println("Query to get all offered rides failed: "+ e.getMessage());
+            System.out.println("Query to get all requested rides failed: "+ e.getMessage());
         }
         finally {
             this.close();
@@ -183,7 +201,7 @@ public class RidesOfferedServices {
             }
             return result;
         }catch (SQLException e){
-            System.out.println("Query to get all offered rides to "+destinationcity +" failed: "+ e.getMessage());
+            System.out.println("Query to get all requested rides to "+destinationcity +" failed: "+ e.getMessage());
         }
         finally {
             this.close();
@@ -191,13 +209,13 @@ public class RidesOfferedServices {
         return new ArrayList<>(result);
     }
 
-    public List<Rides> getAllOfferedRidesPaginated(List<Rides> input,int start, int size){
+    public List<Rides> getAllRequestedRidesPaginated(List<Rides> input,int start, int size){
         List<Rides> result = new ArrayList<>(input);
         if((start+size)>result.size()){
             return result;
         }
         else{
-           return new ArrayList<>(result.subList(start,start+size)) ;
+            return new ArrayList<>(result.subList(start,start+size)) ;
         }
     }
 
@@ -212,7 +230,7 @@ public class RidesOfferedServices {
             }
             return result;
         }catch (SQLException e){
-            System.out.println("Query to get all offered rides to "+id +" failed: "+ e.getMessage());
+            System.out.println("Query to get all requested rides to "+id +" failed: "+ e.getMessage());
         }
         finally {
             this.close();
@@ -226,13 +244,13 @@ public class RidesOfferedServices {
             deleteridebyID.setInt(1,id);
             int affectedrows= deleteridebyID.executeUpdate();
             if(affectedrows!=1){
-                System.out.println("Affectedrows Error Deleting from rides_offered table");
+                System.out.println("Affectedrows Error Deleting from requested table");
                 return -1;
             }
             return affectedrows;
         }
         catch (SQLException e){
-            System.out.println("SQL ERROR on Deleting ride:ID "+id+"'rides_offered' table: "+e.getMessage());
+            System.out.println("SQL ERROR on Deleting ride:ID "+id+"'rides_requested' table: "+e.getMessage());
             return -1;
         }
         finally {
@@ -256,13 +274,13 @@ public class RidesOfferedServices {
             int affectedrows= updateridebyID.executeUpdate();
 
             if(affectedrows!=1){
-                System.out.println("Affectedrows Error Updating into rides_offered table");
+                System.out.println("Affectedrows Error Updating into rides_requested table");
                 return -1;
             }
 
         }
         catch (SQLException e){
-            System.out.println("SQL ERROR on 'rides_offered' table: "+e.getMessage());
+            System.out.println("SQL ERROR on 'rides_requested' table: "+e.getMessage());
             return -1;
         }
         finally {
@@ -271,6 +289,5 @@ public class RidesOfferedServices {
         return 1;
 
     }
-
 
 }

@@ -1,8 +1,5 @@
 package StudentPool.model;
 
-import javax.xml.bind.annotation.XmlRootElement;
-import java.sql.Date;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,8 +7,8 @@ import java.util.List;
 public class Rides {
     private Integer id;
     private String user_id;
-    private Date ride_date; // ** Check how to make this SQL compatible
-    private Time ride_time;
+    private String ride_date; // ** Check how to make this SQL compatible
+    private String ride_time;
     private String start_from=null;
     private String end_to;
     private Integer slots_offered=1;
@@ -21,7 +18,7 @@ public class Rides {
     public Rides() {
     }
 
-    public Rides(String user_id, Date ride_date, Time ride_time, String start_from,String end_to) {
+    public Rides(String user_id, String ride_date, String ride_time, String start_from, String end_to) {
         this.user_id = user_id;
         this.ride_date = ride_date;
         this.ride_time = ride_time;
@@ -29,7 +26,7 @@ public class Rides {
         this.end_to = end_to;
     }
 
-    public Rides(String user_id, Date ride_date, Time ride_time, String start_from, String end_to, Integer slots_offered, String instructions) {
+    public Rides(String user_id, String ride_date, String ride_time, String start_from, String end_to, Integer slots_offered, String instructions) {
         this.user_id = user_id;
         this.ride_date = ride_date;
         this.ride_time = ride_time;
@@ -55,19 +52,19 @@ public class Rides {
         this.user_id = user_id;
     }
 
-    public Date getRide_date() {
+    public String getRide_date() {
         return ride_date;
     }
 
-    public void setRide_date(Date ride_date) {
+    public void setRide_date(String ride_date) {
         this.ride_date = ride_date;
     }
 
-    public Time getRide_time() {
+    public String getRide_time() {
         return ride_time;
     }
 
-    public void setRide_time(Time ride_time) {
+    public void setRide_time(String ride_time) {
         this.ride_time = ride_time;
     }
 

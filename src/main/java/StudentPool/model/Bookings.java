@@ -18,6 +18,7 @@ public class Bookings {
 
     public Bookings(Integer slots_booked, String instructions) {
         this.slots_booked = slots_booked;
+        this.booking_date = new Timestamp(new Date().getTime()).toString();//sql Time stamp and Java.util date
         this.instructions = instructions;
     }
 

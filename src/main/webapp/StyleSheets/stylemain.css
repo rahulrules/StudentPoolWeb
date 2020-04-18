@@ -1,0 +1,224 @@
+/*-------------------------------------------*/
+
+/*BASIC SETUP*/
+/*-------------------------------------------*/
+*{
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+html,
+body{
+    background-color: #fff;
+    color: #555;
+    font-family: 'Lato',sans-serif;
+    font-size: 20px;
+    font-weight: 300;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+}
+
+
+/*-------------------------------------------*/
+/*REUSABLE COMMENTS*/
+/*-------------------------------------------*/
+
+.row{
+    max-width: 1140px;
+    margin:0 auto 0 auto;
+}
+
+section{
+    padding: 80px 0;
+}
+.box{
+    padding: 1%;
+}
+
+/*HEADINGS*/
+h1,
+h2,h3{
+
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+
+
+}
+h1
+{
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #fff;
+    font-size:240%; /*The fontsize is relative font-size 20 px defined in html*/
+    word-spacing: 4px;
+
+}
+
+h2{
+
+    color: #555;
+    font-size:180%; /*The fontsize is relative font-size 20 px defined in html*/
+    text-align: center;
+    word-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+h3{
+
+    font-size:110%; /*The fontsize is relative font-size 20 px defined in html*/
+    margin-bottom: 15px;
+}
+
+
+h2:after{
+    display: block;
+    height: 2px;
+    background-color: #3498db;
+    content: " ";/* content is must for after*/
+    width:100px;
+    margin: 0 auto;
+    margin-top: 30px;
+}
+/*------------PARAGRAPHS-----------*/
+
+.long-copy{
+    line-height: 145%;
+    width: 70%;
+    margin-left: 15%;
+}
+.box p{
+    font-size: 90%;
+    line-height: 145%;
+}
+
+
+/*------------LINKS-----------*/
+
+a:link,
+a:visited{
+    color: #3498db;
+    text-decoration: none;
+    padding-bottom: 1px;
+    border-bottom: 1px solid #3498db;
+    transition: border
+}
+
+a:hover,
+a:active{
+    color: #555;
+    border-bottom: 1px solid transparent;
+}
+
+
+
+/*------------BUTTONS-----------*/
+.btn:link,
+.btn:visited,
+input[type=submit],
+input[type=reset]{
+    display: inline-block;
+    padding: 10px 30px; /* 10 px top and bottom, 30 px left&right*/
+    font-weight: 300;
+    text-decoration: none;
+    border-radius: 200px;
+    border:1px solid #3498db;
+    transition: background-color 0.2s,border 0.2s,color 0.2s;
+}
+
+.btn-full:link,
+.btn-full:visited,
+input[type=submit],
+input[type=reset]{
+    border:1px solid #3498db;
+    background-color: #3498db;
+    color: #fff;
+    margin-right: 15px;
+}
+
+.btn-ghost:link,
+.btn-ghost:visited
+{
+    border:1px solid #3498db;
+    color: #3498db;
+}
+
+.btn:hover,
+.btn:active,
+input[type=submit]:hover,
+input[type=submit]:active,
+input[type=reset]:hover,
+input[type=reset]:active{
+    background-color: #0675bf;
+
+}
+
+.btn-full:hover,
+.btn-full:active
+{
+    background-color: #0675bf;
+    color: #fff;
+}
+
+.btn-ghost:hover,
+.btn-ghost:active
+{
+    border:1px solid #0675bf;
+    color: #fff;
+}
+
+
+/*-------------------------------------------*/
+/*HEADER*/
+/*-------------------------------------------*/
+
+header{
+    background-color: rgba(0, 0, 0, 0.7);
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    background-attachment: fixed;
+}
+
+.hero-text-box{
+    position: absolute;
+    width: 1140px;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%,-50%);/* position with respect to text width*/
+
+}
+
+
+.main-nav{
+    float:right;
+    list-style: none;
+    margin-top: 55px;
+}
+
+.main-nav li{
+    display: inline-block;
+    margin-right: 40px;
+
+
+}
+
+.main-nav li a:link,
+.main-nav li a:visited{
+    padding: 8px 0;
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 90%;
+    border-bottom: 2px solid transparent;
+    transition: border-bottom 0.2s;
+
+}
+
+.main-nav li a:hover,
+.main-nav li a:active{
+    border-bottom: 2px solid #3498db;
+
+}

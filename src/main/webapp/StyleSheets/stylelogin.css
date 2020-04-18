@@ -1,0 +1,126 @@
+
+
+/* Bordered form */
+*{
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+html,
+body{
+    background-color: #fff;
+    color: #555;
+    font-family: 'Lato',sans-serif;
+    font-size: 20px;
+    font-weight: 300;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+}
+section{
+    padding: 80px 80px;
+    margin:5% 30% auto 30%;
+    width: 40%;
+
+
+
+}
+
+h2{
+
+    color: #555;
+    font-size:120%; /*The fontsize is relative font-size 20 px defined in html*/
+    text-align: center;
+    word-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+/* Bordered form */
+form {
+    border: 3px solid #ccc;
+    border-radius: 16px;
+}
+
+/* Full-width inputs */
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 50px;
+    box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+button {
+    background-color: #3498db;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 50px;
+
+}
+
+/* Add a hover effect for buttons */
+button:hover {
+    background-color: #0675bf;
+    opacity: 1;
+}
+
+
+/* Extra style for the cancel button (red) */
+.cancelbtn {
+    width: auto;
+    padding: 10px 18px;
+    background-color: #ea9c42;
+
+}
+
+.login-btn {
+    width: auto;
+    padding: 10px 18px;
+    background-color: #ea9c42;
+    float: right;
+    text-decoration: none;
+    color: #fff;
+
+}
+
+.cancelbtn:hover,
+.login-btn:hover{
+    background-color: #e8891b;
+}
+
+
+
+/* Add padding to containers */
+
+.container {
+
+    padding: 16px;
+
+}
+.butn{
+    width:100%;
+    display: inline-block;
+}
+
+
+
+/* The "Forgot password" text */
+span.psw {
+    float: right;
+    padding-top: 16px;
+    color: #555;
+}
+
+
+*:focus{
+    outline:none;
+}
+

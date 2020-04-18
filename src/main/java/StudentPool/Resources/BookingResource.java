@@ -22,17 +22,17 @@ public class BookingResource {
     BookingServices bookingServices= new BookingServices();
 
     @GET
-    public List<Bookings> getRideBookings(@PathParam("id") String id){//same pathparam names?, @pathparam refers to the final pathname
+    public List<Bookings> getRideBookings(@PathParam("rideId") String id){//same pathparam names?, @pathparam refers to the final pathname
          return bookingServices.getBookingForRIdeID(Integer.valueOf(id));
 
     }
 
     @POST
-    public Response bookRide(Bookings newbooking, @PathParam("id") String id,
+    public Response bookRide(Bookings newbooking, @PathParam("rideId") String id,
                              @Context UriInfo uriInfo, @Context HttpHeaders httpHeaders){
         //setmethod of Bookings object is not be used as NOT null Timestamp is to be invoked via constructor
-//        String user_id= new UserAuthenticationFilter().extractUsername(httpHeaders.getRequestHeaders().get(AUTHORIZATION));
-        Bookings tempbooking= new Bookings("rxj0007@ucmo.edu",Integer.valueOf(id),
+        String user_id= new UserAuthenticationFilter().extractUsername(httpHeaders.getRequestHeaders().get(AUTHORIZATION));
+        Bookings tempbooking= new Bookings(user_id,Integer.valueOf(id),
                 newbooking.getSlots_booked(),newbooking.getInstructions());
         Integer createdID=bookingServices.insertBooking(tempbooking);
         URI uri=null;
@@ -51,12 +51,27 @@ public class BookingResource {
                 .build();
     }
 
-    @Path("/{id}")
+    @Path("/{bookingId}")
+    @GET
+    public Bookings getRideBookingbyID(@PathParam("bookingId") String id, @Context UriInfo uriInfo){
+        Bookings fetchedbooking= bookingServices.getBookingbyID(Integer.valueOf(id));
+
+        return fetchedbooking;
+    }
+
+    @Path("/{bookingId}")
     @DELETE
-    public Link deleteBooking(@PathParam("id") String id, @Context UriInfo uriInfo){
+    public Link deleteBooking(@PathParam("bookingId") String id, @Context UriInfo uriInfo){
         Integer result= bookingServices.deletebookID(Integer.valueOf(id));
 
         return new Link(RidesOfferedResource.getURIForAllRO(uriInfo),"Rides_Offered");
+    }
+
+    @Path("/{bookingId}")
+    @PUT
+    public void updateBooking(@PathParam("bookingId") String id, Bookings modifybook,@Context UriInfo uriInfo){
+        Bookings tempbooking= new Bookings(modifybook.getSlots_booked(),modifybook.getInstructions());
+        Integer result=bookingServices.updateBookingbyID(tempbooking,id);
     }
 
 

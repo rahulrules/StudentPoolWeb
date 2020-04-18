@@ -1,5 +1,6 @@
 package StudentPool.Resources.Beans;
 
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.QueryParam;
 
 public class RidesFilterBean {
@@ -7,8 +8,8 @@ public class RidesFilterBean {
     private @QueryParam("to") String Toplace;
     private @QueryParam("from") String Fromplace;
     private @QueryParam("date") String dateofride;
-    private @QueryParam("start") Integer start=1;
-    private @QueryParam("size") Integer size=10;
+    private @DefaultValue("0") @QueryParam("start") Integer start;
+    private @DefaultValue("10") @QueryParam("size") Integer size;
 
     public String getToplace() {
         return Toplace;
